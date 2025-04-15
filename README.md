@@ -12,5 +12,5 @@
 4. **Unity 패키지 가져오기**  
    - `unity_project` 폴더에 있는 `Simulation_package_version1.unitypackage` 파일을 Unity 프로젝트로 드래그 앤 드롭하여 가져옵니다.  
 5. **Unity Simulation만 진행 할 경우**
-   - 'Unity_Simul_V1.1'만 다운로드 후 exe파일을 실행
+   - 'Unity_Simul_V1.1'만 다운로드 후 My project.exe파일을 실행
    
