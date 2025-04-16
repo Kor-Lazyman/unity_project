@@ -23,6 +23,7 @@
 ```mermaid
 classDiagram
    class GameManager {
+   <<MonoBehaviour>>
         +string info_key
         +infos info
         +TMP_Text displaytext
