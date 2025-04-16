@@ -13,6 +13,11 @@
    - `unity_project` 폴더에 있는 `Simulation_package_version1.unitypackage` 파일을 Unity 프로젝트로 드래그 앤 드롭하여 가져옵니다.  
 5. **Unity Simulation만 진행 할 경우**
    - 'Unity_Simul_V1.1'만 다운로드 후 My project.exe파일을 실행
+# 사용 Asset
+1. banan man: https://assetstore.unity.com/packages/3d/characters/humanoids/banana-man-196830
+2. Kitchen Furniture Starterpack: https://assetstore.unity.com/packages/3d/props/furniture/kitchen-furniture-starterpack-209331
+3. Cartoon Wooden Box: https://assetstore.unity.com/packages/3d/props/furniture/cartoon-wooden-box-242926
+4. Controllable Forklift Free: https://assetstore.unity.com/packages/3d/vehicles/controllable-forklift-free-80275
 
 
 ```mermaid
