@@ -18,8 +18,7 @@
 2. Kitchen Furniture Starterpack: https://assetstore.unity.com/packages/3d/props/furniture/kitchen-furniture-starterpack-209331
 3. Cartoon Wooden Box: https://assetstore.unity.com/packages/3d/props/furniture/cartoon-wooden-box-242926
 4. Controllable Forklift Free: https://assetstore.unity.com/packages/3d/vehicles/controllable-forklift-free-80275
-![Editor _ Mermaid Chart-2025-05-26-090924](https://github.com/user-attachments/assets/d1997957-35bd-4677-b186-45e03b63e996)
-![Editor _ Mermaid Chart-2025-05-26-091552](https://github.com/user-attachments/assets/39b50a8f-e593-47aa-8dd6-6f433a25fc87)
+
 
 ```mermaid
 classDiagram
@@ -102,4 +101,129 @@ classDiagram
 
 
     json_read_alt --> json_read_alt.simulation_config : contains
+```
+```mermaid
+sequenceDiagram
+    autonumber
+    participant AGV as base_agv
+    participant Machine as machine
+    participant Inspect as inspection
+    participant Scan as scan
+    participant GM as GameManager
+    participant JSON as json_read_alt
+
+    %% 초기화
+    GM->>JSON: convert_json_to_dictionary
+    JSON-->>GM: 설정 및 로그 데이터 반환
+
+    GM->>AGV: set (여러 AGV 인스턴스 초기화)
+    GM->>Machine: set (여러 Machine 인스턴스 초기화)
+    GM->>Inspect: set (여러 Inspection 인스턴스 초기화)
+
+    %% FixedUpdate 루프
+    loop FixedUpdate 루프
+        GM->>Scan: scan_agv(log, time, agv_list)
+        Scan->>AGV: set_route
+        Scan->>AGV: Input_Order
+        Scan->>AGV: Move
+
+        GM->>Scan: scan_machine(log, time, machine_list)
+        Scan->>Machine: Change_model
+
+        GM->>Scan: scan_inspect(log, time, inspect_list)
+        Scan->>Inspect: set_route
+        Scan->>Inspect: Input_Order
+        Scan->>Inspect: Move
+
+        GM->>Scan: scan_stacker(log, time)
+        Scan-->>GM: Stacker count 변경
+
+        GM->>GM: 카메라 추적, UI 텍스트 갱신
+    end
+```
+```mermaid
+flowchart TD
+    %% 초기화 및 설정
+    A[Start GameManager] --> B[json_read_alt.convert_json_to_dictionary()]
+    B --> C1[_setting_agv()]
+    B --> C2[_setting_machine()]
+    B --> C3[_setting_inspection()]
+
+    C1 --> D[Create AGVs (base_agv)]
+    C2 --> E[Create Machines (machine)]
+    C3 --> F[Create Inspectors (inspection)]
+
+    F --> G[Time.fixedDeltaTime = 0.001]
+    G --> H[FixedUpdate Loop]
+
+    %% FixedUpdate 내부 스캔 함수들
+    H --> I[scan_env.scan_agv()]
+    H --> J[scan_env.scan_machine()]
+    H --> K[scan_env.scan_inspect()]
+    H --> L[scan_env.scan_stacker()]
+
+    I --> I1[base_agv.set_route()]
+    I1 --> I2[base_agv.Input_Order()]
+    I2 --> I3[base_agv.Move()]
+
+    J --> J1[machine.Change_model()]
+
+    K --> K1[inspection.set_route()]
+    K1 --> K2[inspection.Input_Order()]
+    K2 --> K3[inspection.Move()]
+
+    L --> L1[Update Stacker Count]
+
+    H --> M[Update Camera]
+    M --> N[Update UI Text / Speed]
+
+    %% 스타일 지정
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style H,H1,H2,H3,H4 fill:#ccf,stroke:#000
+    style I,J,K,L fill:#ccf,stroke:#000
+    style G fill:#bbf,stroke:#333,stroke-width:1px
+```
+```mermaid
+flowchart TD
+    %% 초기화 및 설정
+    A[Start GameManager] --> B[json_read_alt.convert_json_to_dictionary()]
+    B --> C1[_setting_agv()]
+    B --> C2[_setting_machine()]
+    B --> C3[_setting_inspection()]
+
+    C1 --> D[Create AGVs (base_agv)]
+    C2 --> E[Create Machines (machine)]
+    C3 --> F[Create Inspectors (inspection)]
+
+    F --> G[Time.fixedDeltaTime = 0.001]
+    G --> H[FixedUpdate Loop]
+
+    %% FixedUpdate 내부 스캔 함수들
+    H --> I[scan_env.scan_agv()]
+    H --> J[scan_env.scan_machine()]
+    H --> K[scan_env.scan_inspect()]
+    H --> L[scan_env.scan_stacker()]
+
+    I --> I1[base_agv.set_route()]
+    I1 --> I2[base_agv.Input_Order()]
+    I2 --> I3[base_agv.Move()]
+
+    J --> J1[machine.Change_model()]
+
+    K --> K1[inspection.set_route()]
+    K1 --> K2[inspection.Input_Order()]
+    K2 --> K3[inspection.Move()]
+
+    L --> L1[Update Stacker Count]
+
+    H --> M[Update Camera]
+    M --> N[Update UI Text / Speed]
+
+    %% 스타일 지정
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style H,H1,H2,H3,H4 fill:#ccf,stroke:#000
+    style I,J,K,L fill:#ccf,stroke:#000
+    style G fill:#bbf,stroke:#333,stroke-width:1px
+```
+
 
