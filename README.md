@@ -22,84 +22,161 @@
 
 ```mermaid
 classDiagram
-    %% === 주요 클래스 ===
-    class GameManager {
-        - json_read_alt json_data_alt  %% JSON 데이터 파서
-        - scan scan_env  %% AGV, 머신, 검사기 동작 제어 클래스
-        - List~base_agv~ build_agvs  %% AGV 객체 리스트
-        - List~machine~ build_machine  %% 머신 객체 리스트
-        - List~inspection~ inspection_inspector  %% 검사기 객체 리스트
-        - void _setting_agv(...) %% AGV 초기화 함수
-        - void _setting_machine(...) %% 머신 초기화 함수
-        - void _setting_inspection(...) %% 검사기 초기화 함수
-    }
+%% === GameManager ===
+class GameManager {
+    +string info_key : 현재 선택된 정보 유형
+    +Camera mainCamera : 메인 카메라
+    +Camera Scene_camera : 전체 씬 카메라
+    +Camera Current_Camera : 현재 카메라
+    +base_agv tracking_agv : 추적 중 AGV
+    +inspection tracking_inspector : 추적 중 검사자
+    +TMP_Text displaytext : AGV 정보 텍스트
+    +TMP_Text speeddisplay : 속도 표시 텍스트
+    +TMP_Text cameratext : 카메라 상태 텍스트
+    +GameObject canvas : UI 캔버스
+    +List~base_agv~ build_agvs : Build 부서 AGV 목록
+    +List~base_agv~ wash_agvs : Wash 부서 AGV 목록
+    +List~base_agv~ dry_agvs : Dry 부서 AGV 목록
+    +List~base_agv~ return_agvs : Return 부서 AGV 목록
+    +List~machine~ build_machine : Build 부서 머신
+    +List~machine~ wash_machine : Wash 부서 머신
+    +List~machine~ dry_machine : Dry 부서 머신
+    +List~inspection~ inspection_inspector : 검사자 목록
+    +Dictionary~string,int~ Stacker_info : 스태커 수량
+    +GameObject Line_Inspect : 검사 라인
+    +GameObject Quit_Button~Button_4 : 시간 제어 버튼
+    +GameObject Scene_Button~Inspect_Button : 카메라 버튼
+    +GameObject Plus_Button~Minus_Button : 추적 변경 버튼
+    +json_read_alt json_data_alt : json 로딩 클래스
+    +scan scan_env : 스캔(명령 해석) 클래스
+    +int Number_Camera : 현재 추적 카메라 번호
+    +int magnification : 배속
+    +float base_time : 기본 시간 단위
+    +int time : 시뮬레이션 시간
+    +int time_magnification : 시간 배율
+    +string Camera_Type : 현재 카메라 상태
+    +bool cooldown : 버튼 쿨다운
+    +void Start()
+    +void FixedUpdate()
+    +void Keyboard_input()
+    +void Scan_Env()
+    +void Buttons()
+    +void stop_button()
+    +void speed_button(int)
+    +void camera_button(string)
+    +void Up_Down(string)
+    +void agv_camera_change(List)
+    +void inspect_camera_change()
+    +void camera_tracking()
+}
 
-    class base_agv {
-        - GameObject model  %% AGV의 3D 모델
-        - Queue~Vector3~ route  %% 이동 경로 큐
-        - void set() %% AGV 리소스 로드 및 기본 세팅
-        - void set_route(...) %% 경로 설정
-        - void Input_Order() %% 작업 시작 명령
-        - void Move() %% 이동 수행
-        - void _Change_model(...) %% 모델 상태(work/idle/wait) 전환
-    }
+%% === base_agv ===
+class base_agv {
+    +Camera agvCamera : AGV 카메라
+    +string modelPath_idle~work~wait : 모델 경로
+    +GameObject agv_work~wait~idle : 모델 프리팹
+    +GameObject model : 현재 모델
+    +Queue~Vector3~ route : 경로
+    +Vector3 current_destination : 목표 위치
+    +Vector3 wait_place : 대기 위치
+    +bool work : 작업 중 여부
+    +float elapsed_time : 프레임 시간
+    +float speed : 이동 속도
+    +void set()
+    +void set_route(Queue~Vector3~)
+    +void _GenerateModelAtlineMid()
+    +void _Change_model(string)
+    +void Input_Order()
+    +void Move()
+    +void wait_work()
+    +void End_Work()
+}
 
-    class inspection {
-        - GameObject model  %% 검사기의 3D 모델
-        - Queue~Vector3~ route  %% 이동 경로 큐
-        - void set(...) %% 검사기 리소스 로드 및 초기화
-        - void set_route(...) %% 경로 설정
-        - void Input_Order() %% 작업 시작 명령
-        - void Move() %% 이동 수행
-        - void _Change_model(...) %% 모델 상태 전환
-    }
+%% === inspection ===
+class inspection {
+    +int inspection_id : 식별자
+    +Camera inspectionCamera : 검사자 카메라
+    +string modelPath_idle~work~wait : 모델 경로
+    +GameObject parent_line : 상위 라인
+    +GameObject current_line : 현재 위치
+    +GameObject inspect_work~wait~idle : 프리팹
+    +GameObject model : 현재 출력 중 모델
+    +Queue~Vector3~ route : 이동 경로
+    +Vector3 current_desitnation : 현재 목적지
+    +Vector3 wait_place : 대기 위치
+    +float elapsed_time : 시간 단위
+    +float speed : 속도
+    +bool work : 작업 중 여부
+    +void set(int)
+    +void set_route(Queue~Vector3~)
+    +void GenerateModelAtlineLeft()
+    +void GenerateModelAtlineRight()
+    +void _Change_model(string)
+    +void Input_Order()
+    +void Move()
+    +void wait_work()
+    +void End_Work()
+}
 
-    class machine {
-        - GameObject model  %% 머신 3D 모델
-        - void set(...) %% 머신 초기화
-        - void Change_model(...) %% 상태에 따른 모델 전환
-    }
+%% === machine ===
+class machine {
+    +int machine_id : 식별자
+    +GameObject parent_line : 상위 라인
+    +string modelPath_Idle~Work~Ready : 모델 경로
+    +GameObject model : 현재 머신
+    +GameObject Machine_idle~work~ready : 프리팹
+    +bool work : 작동 여부
+    +void set(int, Vector3, Vector3)
+    +void GenerateModel(Vector3, Vector3)
+    +void Change_model(string)
+}
 
-    class scan {
-        - int scan_agv(...) %% AGV 작업 처리
-        - int scan_machine(...) %% 머신 상태 갱신
-        - int scan_inspect(...) %% 검사기 작업 처리
-        - void scan_stacker(...) %% 스태커 입출 기록 갱신
-    }
+%% === json_read_alt ===
+class json_read_alt {
+    +simulation_config config : 설정 구조체
+    +Dictionary~string,Vector3~ Machines~Bases~Connect~Inspect~Stackers
+    +Dictionary~int, Dictionary~int, Queue~Vector3~~ buildAgvData~... : AGV 로그
+    +Dictionary~int, Dictionary~int, string~ buildMachineData~... : 머신 로그
+    +Dictionary~string, Dictionary~string, Queue~int~~ StackerLog : 스태커 로그
+    +void convert_json_to_dictionary()
+    +void _read_config_()
+    +void _read_objects_()
+    +Dictionary _setting_route_(string)
+    +Dictionary _machine_log_setting_(...)
+}
 
-    class json_read_alt {
-        - simulation_config config  %% 시뮬레이션 설정값 클래스
-        - Dictionary~int, Dictionary~int, Queue~Vector3~~~ buildAgvData %% AGV 로그 데이터
-        - Dictionary~string, Vector3~ Machines %% 머신 위치 정보
-        - void convert_json_to_dictionary() %% JSON 파싱 시작 함수
-    }
+%% === scan ===
+class scan {
+    +int scan_agv(...) : AGV 동작 명령 수행
+    +int scan_machine(...) : 머신 상태 업데이트
+    +int scan_inspect(...) : 검사자 이동 명령
+    +void scan_stacker(...) : 스태커 입출 기록 처리
+}
 
-    class json_read_alt.simulation_config {
-        int Num_Build_Machine %% 빌드 머신 수
-        int Num_Wash_Machine %% 세척 머신 수
-        int Num_Dry_Machine %% 건조 머신 수
-        int Num_Inspector %% 검사기 수
-        int Num_Build_Agvs %% 빌드 AGV 수
-        int Num_Wash_Agvs %% 세척 AGV 수
-        int Num_Dry_Agvs %% 건조 AGV 수
-        int Num_Return_Agvs %% 반환 AGV 수
-        int Num_Pallets %% 팔레트 수
-    }
+%% === CameraController ===
+class CameraController {
+    +Transform orbitCenter : 회전 중심
+    +float radius~height~tiltAngle : 궤도 반지름/높이/기울기
+    +float totalFrames : 전체 프레임 수
+    +float moveSpeed : 이동 속도
+    +float rotationSpeed : 회전 속도
+    +float zoomSpeed : 줌 속도
+    +float minFOV~maxFOV : 줌 한계
+    +void Start()
+    +void Update()
+}
 
-    class CameraController {
-        - Transform orbitCenter %% 궤도 중심점
-        - float radius %% 회전 반지름
-        - void Update() %% 카메라 입력 및 궤도 이동 처리
-    }
+%% === 관계선 설정 ===
+GameManager --> base_agv : AGV 제어
+GameManager --> inspection : 검사자 제어
+GameManager --> machine : 머신 제어
+GameManager --> scan : 명령 해석
+GameManager --> json_read_alt : json 로딩
 
-    %% === 클래스 간 관계 ===
-    GameManager --> json_read_alt : uses
-    GameManager --> scan : uses
-    GameManager --> base_agv : instantiates
-    GameManager --> machine : instantiates
-    GameManager --> inspection : instantiates
+base_agv --> Camera : 카메라 사용
+inspection --> Camera : 카메라 사용
 
-    json_read_alt --> json_read_alt.simulation_config : contains
+json_read_alt --> simulation_config : 구성 정보 포함
 
 ```
 ```mermaid
