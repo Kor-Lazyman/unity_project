@@ -18,6 +18,7 @@
 2. Kitchen Furniture Starterpack: https://assetstore.unity.com/packages/3d/props/furniture/kitchen-furniture-starterpack-209331
 3. Cartoon Wooden Box: https://assetstore.unity.com/packages/3d/props/furniture/cartoon-wooden-box-242926
 4. Controllable Forklift Free: https://assetstore.unity.com/packages/3d/vehicles/controllable-forklift-free-80275
+![Editor _ Mermaid Chart-2025-05-26-090924](https://github.com/user-attachments/assets/d1997957-35bd-4677-b186-45e03b63e996)
 
 ```mermaid
 classDiagram
@@ -100,5 +101,4 @@ classDiagram
 
 
     json_read_alt --> json_read_alt.simulation_config : contains
-![Editor _ Mermaid Chart-2025-05-26-090924](https://github.com/user-attachments/assets/bcf70363-29db-43d4-9a58-338ebbd4a376)
 
