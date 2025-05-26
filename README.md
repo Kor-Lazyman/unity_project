@@ -19,6 +19,7 @@
 3. Cartoon Wooden Box: https://assetstore.unity.com/packages/3d/props/furniture/cartoon-wooden-box-242926
 4. Controllable Forklift Free: https://assetstore.unity.com/packages/3d/vehicles/controllable-forklift-free-80275
 ![Editor _ Mermaid Chart-2025-05-26-090924](https://github.com/user-attachments/assets/d1997957-35bd-4677-b186-45e03b63e996)
+![Editor _ Mermaid Chart-2025-05-26-091552](https://github.com/user-attachments/assets/39b50a8f-e593-47aa-8dd6-6f433a25fc87)
 
 ```mermaid
 classDiagram
