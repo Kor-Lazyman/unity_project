@@ -100,3 +100,5 @@ classDiagram
 
 
     json_read_alt --> json_read_alt.simulation_config : contains
+![Editor _ Mermaid Chart-2025-05-26-090924](https://github.com/user-attachments/assets/bcf70363-29db-43d4-9a58-338ebbd4a376)
+
