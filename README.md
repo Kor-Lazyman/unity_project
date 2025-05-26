@@ -19,7 +19,7 @@
 3. Cartoon Wooden Box: https://assetstore.unity.com/packages/3d/props/furniture/cartoon-wooden-box-242926
 4. Controllable Forklift Free: https://assetstore.unity.com/packages/3d/vehicles/controllable-forklift-free-80275
 
-
+```mermaid
 classDiagram
     %% === Main Classes ===
     class GameManager {
@@ -98,8 +98,5 @@ classDiagram
     GameManager --> machine : instantiates
     GameManager --> inspection : instantiates
 
-    base_agv --> GameObject : uses
-    inspection --> GameObject : uses
-    machine --> GameObject : uses
 
     json_read_alt --> json_read_alt.simulation_config : contains
